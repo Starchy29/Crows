@@ -29,24 +29,30 @@ public class BattleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Setup(1, 1);
+        //Setup(1, 2);
+        players = new CharacterScript[1];
+        enemies = new CharacterScript[2];
+        fliers = new CharacterScript[2];
 
         turnOrder = new List<TurnMove>();
-
-        // temp
+        
         players[0] = GameObject.Find("Hunter").GetComponent<HunterScript>();
 
+        // temp
         GameObject enemy = Instantiate(characterPrefab);
         enemy.GetComponent<SpriteRenderer>().color = Color.red;
         enemy.transform.position = new Vector3(5, 0, 0);
         enemies[0] = enemy.GetComponent<CharacterScript>();
+
+        enemy = Instantiate(characterPrefab);
+        enemy.GetComponent<SpriteRenderer>().color = Color.red;
+        enemy.transform.position = new Vector3(8, 0, 0);
+        enemies[1] = enemy.GetComponent<CharacterScript>();
     }
 
     // sets up this encounter
     public void Setup(int numPlayers, int numEnemies) {
-        players = new CharacterScript[numPlayers];
-        enemies = new CharacterScript[numEnemies];
-        fliers = new CharacterScript[numEnemies];
+        
     }
 
     // Update is called once per frame

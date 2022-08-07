@@ -11,6 +11,23 @@ public enum MovePriority {
     Debuff
 }
 
+public enum Aim {
+    None,
+    Forward,
+    Up,
+    Air,
+}
+
+[Flags]
+public enum TargetType { // powers of 2 enable enums to hold multiple target types at once
+    Self = 1,
+    Ally = 2,
+    Aerial = 4,
+    Grounded = 8,
+    Forward = 16,
+    AllGround = 32
+}
+
 // defines how a move works and also tracks its animation progress
 public class TurnMove
 {
@@ -25,7 +42,7 @@ public class TurnMove
     public String Name { get { return name; } }
     public int Cost { get { return cost; } }
 
-    // move animation process tracking
+    // animation process tracking
     private bool running;
     private Animation activeAnimation;
     public bool Running { get { return running; } }
@@ -42,6 +59,7 @@ public class TurnMove
         this.animationBlueprint = animation;
     }
 
+    // executes the move's animation, ending with the mechanical effect
     public void Run() {
         running = true;
         activeAnimation = animationBlueprint.Copy();
