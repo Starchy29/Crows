@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    [SerializeField] private GameObject menus; // activate / deactivate all menus
     [SerializeField] private GameObject characterPrefab;
 
     private bool IsMoveSelect = true; // false: turn animation is playing
@@ -12,9 +13,12 @@ public class BattleManager : MonoBehaviour
     private int abilityPoints;
 
     // character positions
-    public CharacterScript[] players { get; set; } // the player's characters
-    public CharacterScript[] enemies { get; set; }
-    public CharacterScript[] fliers { get; set; } // aerial enemies
+    private CharacterScript[] players; // the player's characters
+    private CharacterScript[] enemies;
+    private CharacterScript[] fliers; // aerial enemies
+    public CharacterScript[] Players { get { return players; } }
+    public CharacterScript[] Enemies { get { return enemies; } }
+    public CharacterScript[] Fliers { get { return fliers; } }
 
     // turn execution
     List<TurnMove> turnOrder;
@@ -30,9 +34,7 @@ public class BattleManager : MonoBehaviour
         turnOrder = new List<TurnMove>();
 
         // temp
-        GameObject player = Instantiate(characterPrefab);
-        player.transform.position = new Vector3(-5, 0, 0);
-        players[0] = player.GetComponent<CharacterScript>();
+        players[0] = GameObject.Find("Hunter").GetComponent<HunterScript>();
 
         GameObject enemy = Instantiate(characterPrefab);
         enemy.GetComponent<SpriteRenderer>().color = Color.red;
@@ -61,7 +63,7 @@ public class BattleManager : MonoBehaviour
                     if(currentMove >= turnOrder.Count) {
                         // end animation phase
                         IsMoveSelect = true;
-                        // AI chooses moves for next turn
+                        menus.SetActive(true);
                         // add ability points
                     } else {
                         // run next move
@@ -81,12 +83,12 @@ public class BattleManager : MonoBehaviour
 
     // click event for when the player locks in their moves for the turn
     public void ConfirmTurn() {
-        players[0].SelectMove("Attack", new List<CharacterScript>(){ enemies[0] });
-        enemies[0].SelectMove("Attack", new List<CharacterScript>() { players[0] });
         // close menus
+        menus.SetActive(false);
 
         // determine turn order
         // temp: players then enemies
+        ChooseMoves();
         turnOrder.Clear();
         foreach(CharacterScript player in players) {
             if(player.SelectedMove != null) {
@@ -105,5 +107,12 @@ public class BattleManager : MonoBehaviour
         currentMove = 0;
         waitBetweenMoves = 0;
         turnOrder[currentMove].Run();
+    }
+
+    // enemy AI
+    private void ChooseMoves() {
+        foreach(CharacterScript enemy in enemies) {
+            enemy.SelectMove("Attack", new List<CharacterScript>(players));
+        }
     }
 }

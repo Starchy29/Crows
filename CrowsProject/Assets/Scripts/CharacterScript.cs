@@ -6,9 +6,11 @@ using UnityEngine;
 // a character in combat
 public class CharacterScript : MonoBehaviour
 {
+    protected BattleManager manager;
+
     // health
     [SerializeField] private int maxHealth;
-    [SerializeField] protected int health;
+    protected int health;
     public int Health {
         get { return health; }
         set {
@@ -44,7 +46,10 @@ public class CharacterScript : MonoBehaviour
     void Start()
     {
         health = maxHealth;
+        manager = GameObject.Find("Battle Manager").GetComponent<BattleManager>();
         moveList = new List<TurnMove>();
+        selectedMove = null;
+        AddMoves();
         
         // temp
         moveList.Add(new TurnMove("Attack", 0, this, 
@@ -54,6 +59,8 @@ public class CharacterScript : MonoBehaviour
             new Animation()
         ));
     }
+
+    protected virtual void AddMoves() { } // sub classes can add their specific moves
 
     private void UpdateHealthBar() {
         GameObject hpBar = gameObject.transform.GetChild(0).gameObject;

@@ -7,6 +7,7 @@ public class ButtonScript : MonoBehaviour
 {
     [SerializeField] private UnityEvent clickEvent;
     private Rect box;
+    public ButtonGroup Group { get; set; }
 
     // Start is called before the first frame update
     void Start()
@@ -20,16 +21,23 @@ public class ButtonScript : MonoBehaviour
     void Update()
     {
         bool hovered = box.Contains(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        if(hovered) {
+        if(Group != null && Group.Selected == this) {
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.1f, 0.5f);
+        }
+        else if(hovered) {
             // highlight color
             gameObject.GetComponent<SpriteRenderer>().color = new Color(0.1f, 0.1f, 0.5f);
-        } else {
+        }
+        else {
             // regular color
             gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0);
         }
 
         if(Input.GetMouseButtonDown(0) && hovered) {
             //click
+            if(Group != null) {
+                Group.Selected = this;
+            }
             clickEvent.Invoke();
         }
     }
