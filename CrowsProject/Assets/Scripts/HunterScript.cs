@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HunterScript : CharacterScript
 {
-    // Start is called before the first frame update
     protected override void AddMoves() {
         moveList.Add(new TurnMove("Heal", 0, this,
             (CharacterScript user, List<CharacterScript> targets) => {
@@ -12,6 +11,7 @@ public class HunterScript : CharacterScript
             },
             new Animation()
         ));
+
     }
 
     // button move selectors

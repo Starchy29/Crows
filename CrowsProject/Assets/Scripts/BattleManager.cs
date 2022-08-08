@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField] private GameObject menus; // activate / deactivate all menus
     [SerializeField] private GameObject characterPrefab;
 
     private bool IsMoveSelect = true; // false: turn animation is playing
@@ -19,6 +18,9 @@ public class BattleManager : MonoBehaviour
     public CharacterScript[] Players { get { return players; } }
     public CharacterScript[] Enemies { get { return enemies; } }
     public CharacterScript[] Fliers { get { return fliers; } }
+    private Vector3[] playerPositions;
+    private Vector3[] enemyPositions;
+    private Vector3[] flierPositions;
 
     // turn execution
     List<TurnMove> turnOrder;
@@ -30,13 +32,25 @@ public class BattleManager : MonoBehaviour
     void Start()
     {
         //Setup(1, 2);
-        players = new CharacterScript[1];
+        players = new CharacterScript[4];
         enemies = new CharacterScript[2];
         fliers = new CharacterScript[2];
 
         turnOrder = new List<TurnMove>();
-        
-        players[0] = GameObject.Find("Hunter").GetComponent<HunterScript>();
+
+        playerPositions = new Vector3[4];
+        for(int i = 0; i < 4; i++) {
+            playerPositions[i] = new Vector3(-1.5f - 2.2f * i, 0, 0);
+        }
+
+        players[0] = GameObject.Find("Cultist").GetComponent<CultistScript>();
+        players[1] = GameObject.Find("Hunter").GetComponent<HunterScript>();
+        players[2] = GameObject.Find("Witch").GetComponent<WitchScript>();
+        players[3] = GameObject.Find("Demon").GetComponent<DemonScript>();
+
+        for(int i = 0; i < players.Length; i++) {
+            players[i].gameObject.transform.position = playerPositions[i];
+        }
 
         // temp
         GameObject enemy = Instantiate(characterPrefab);
@@ -48,6 +62,11 @@ public class BattleManager : MonoBehaviour
         enemy.GetComponent<SpriteRenderer>().color = Color.red;
         enemy.transform.position = new Vector3(8, 0, 0);
         enemies[1] = enemy.GetComponent<CharacterScript>();
+
+        // make the battle start with a pause so the enemy can choose moves
+        IsMoveSelect = false;
+        currentMove = 0;
+        waitBetweenMoves = PAUSE_BETWEEN_MOVES;
     }
 
     // sets up this encounter
@@ -69,7 +88,7 @@ public class BattleManager : MonoBehaviour
                     if(currentMove >= turnOrder.Count) {
                         // end animation phase
                         IsMoveSelect = true;
-                        menus.SetActive(true);
+                        ChooseMoves(); // can make decisions based on what player selected this turn
                         // add ability points
                     } else {
                         // run next move
@@ -90,11 +109,9 @@ public class BattleManager : MonoBehaviour
     // click event for when the player locks in their moves for the turn
     public void ConfirmTurn() {
         // close menus
-        menus.SetActive(false);
 
         // determine turn order
         // temp: players then enemies
-        ChooseMoves();
         turnOrder.Clear();
         foreach(CharacterScript player in players) {
             if(player.SelectedMove != null) {

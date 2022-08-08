@@ -71,6 +71,7 @@ public class CharacterScript : MonoBehaviour
         hpBar.transform.localScale = newScale;
         Vector3 newPos = hpBack.transform.position;
         newPos.x -= shift;
+        newPos.z = -1; // make sure color lies over back
         hpBar.transform.position = newPos;
     }
 }

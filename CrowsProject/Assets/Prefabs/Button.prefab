@@ -270,6 +270,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 569559400e5bb2049bb3c6758f925c58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  regularColor: {r: 0, g: 0, b: 0, a: 1}
+  hoveredColor: {r: 0.20484152, g: 0.77633345, b: 0.7924528, a: 1}
+  selectedColor: {r: 0.6771884, g: 0.19544321, b: 0.8490566, a: 1}
   clickEvent:
     m_PersistentCalls:
       m_Calls:
