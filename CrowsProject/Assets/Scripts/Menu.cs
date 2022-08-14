@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // a group of buttons where only one is selected at a time
-public class ButtonGroup : MonoBehaviour
+public class Menu : MonoBehaviour
 {
-    [SerializeField] private List<ButtonScript> buttons;
-    private InputManager input;
+    [SerializeField] protected List<ButtonScript> buttons;
+    [SerializeField] protected Menu previous;
+    protected InputManager input; 
+
     public ButtonScript Selected { get; set; }
     public List<ButtonScript> Buttons { get { return buttons; } }
 
@@ -18,13 +20,21 @@ public class ButtonGroup : MonoBehaviour
             button.Group = this;
             button.Deselect();
         }
-        Selected = buttons[0];
-        Selected.Select();
+
+        if(buttons.Count > 0) {
+            Selected = buttons[0];
+            Selected.Select();
+        }
     }
 
-    private void Update() {
+    void Update() {
         if(input.ConfirmJustPressed()) {
             Selected.Click();
+        }
+        else if(input.CancelJustPressed() && previous != null) {
+            // go to previous menu
+            Close();
+            previous.Open();
         }
         else if(input.JustPressed(Direction.Up)) {
             Selected.Deselect();
@@ -46,5 +56,13 @@ public class ButtonGroup : MonoBehaviour
             Selected = Selected.GetClosestNeighbor(Direction.Right);
             Selected.Select();
         }
+    }
+
+    public void Open() {
+        gameObject.SetActive(true);
+    }
+
+    public void Close() {
+        gameObject.SetActive(false);
     }
 }

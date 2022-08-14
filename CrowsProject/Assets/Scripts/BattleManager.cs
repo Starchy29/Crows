@@ -26,30 +26,35 @@ public class BattleManager : MonoBehaviour
     List<TurnMove> turnOrder;
     private byte currentMove;
     private float waitBetweenMoves;
-    private const float PAUSE_BETWEEN_MOVES = 1;
+    private const float PAUSE_BETWEEN_MOVES = 0.5f;
 
     // Start is called before the first frame update
     void Start()
     {
-        //Setup(1, 2);
         players = new CharacterScript[4];
-        enemies = new CharacterScript[2];
-        fliers = new CharacterScript[2];
+        enemies = new CharacterScript[4];
+        fliers = new CharacterScript[4];
 
         turnOrder = new List<TurnMove>();
 
         playerPositions = new Vector3[4];
         for(int i = 0; i < 4; i++) {
-            playerPositions[i] = new Vector3(-1.5f - 2.2f * i, 0, 0);
+            playerPositions[i] = new Vector3(-1.5f - 2.2f * i, -2, 0);
         }
 
-        players[0] = GameObject.Find("Cultist").GetComponent<CultistScript>();
-        players[1] = GameObject.Find("Hunter").GetComponent<HunterScript>();
-        players[2] = GameObject.Find("Witch").GetComponent<WitchScript>();
-        players[3] = GameObject.Find("Demon").GetComponent<DemonScript>();
+        players[0] = Global.Inst.Cultist;
+        players[1] = Global.Inst.Hunter;
+        players[2] = Global.Inst.Demon;
+        players[3] = Global.Inst.Witch;
 
+        // position players and their selectors
+        List<ButtonScript> selectButtons = Global.Inst.CharacterSelectMenu.Buttons;
         for(int i = 0; i < players.Length; i++) {
-            players[i].gameObject.transform.position = playerPositions[i];
+            Vector3 pos = playerPositions[i];
+            players[i].gameObject.transform.position = pos;
+            pos.y += 2;
+            selectButtons[i].gameObject.transform.position = pos;
+            selectButtons[i].SetBox();
         }
 
         // temp
@@ -69,11 +74,6 @@ public class BattleManager : MonoBehaviour
         waitBetweenMoves = PAUSE_BETWEEN_MOVES;
     }
 
-    // sets up this encounter
-    public void Setup(int numPlayers, int numEnemies) {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -90,6 +90,7 @@ public class BattleManager : MonoBehaviour
                         IsMoveSelect = true;
                         ChooseMoves(); // can make decisions based on what player selected this turn
                         // add ability points
+                        Global.Inst.CharacterSelectMenu.Open();
                     } else {
                         // run next move
                         turnOrder[currentMove].Run();
@@ -109,6 +110,7 @@ public class BattleManager : MonoBehaviour
     // click event for when the player locks in their moves for the turn
     public void ConfirmTurn() {
         // close menus
+        Global.Inst.CharacterSelectMenu.Close();
 
         // determine turn order
         // temp: players then enemies
@@ -135,7 +137,12 @@ public class BattleManager : MonoBehaviour
     // enemy AI
     private void ChooseMoves() {
         foreach(CharacterScript enemy in enemies) {
-            enemy.SelectMove("Attack", new List<CharacterScript>(players));
+            if(enemy == null) {
+                continue;
+            }
+
+            enemy.SelectMove("Attack");
+            enemy.SelectedMove.Targets = new List<CharacterScript>() { players[1] };
         }
     }
 }

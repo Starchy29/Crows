@@ -31,25 +31,26 @@ public class InputManager : MonoBehaviour
             currentInput = dPad;
         }
 
-        Direction currentDir = Direction.None;
-        if(currentInput.sqrMagnitude > 0.7 * 0.7) { // dead zone
+        lastJoystickDir = joystickDir;
+        if(currentInput.sqrMagnitude > 0.7 * 0.7) {
             if(Mathf.Abs(currentInput.x) > Mathf.Abs(currentInput.y)) { // horizontal
                 if(currentInput.x > 0) {
-                    currentDir = Direction.Right;
+                    joystickDir = Direction.Right;
                 } else {
-                    currentDir = Direction.Left;
+                    joystickDir = Direction.Left;
                 }
             } else { // vertical
                 if(currentInput.y > 0) {
-                    currentDir = Direction.Up;
+                    joystickDir = Direction.Up;
                 } else {
-                    currentDir = Direction.Down;
+                    joystickDir = Direction.Down;
                 }
             }
         }
-
-        lastJoystickDir = joystickDir;
-        joystickDir = currentDir;
+        else if(currentInput.sqrMagnitude < 0.3 * 0.3) { // dead zone
+            joystickDir = Direction.None;
+        }
+        // else joystick stays the same (0.3-0.7)
     }
 
     public bool JustPressed(Direction direction) {
@@ -58,6 +59,10 @@ public class InputManager : MonoBehaviour
 
     public bool ConfirmJustPressed() {
         return Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.JoystickButton2);
+    }
+
+    public bool CancelJustPressed() {
+        return Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton1) || Input.GetKeyDown(KeyCode.JoystickButton3);
     }
 
     private bool GamePadJustPressed(Direction direction) {

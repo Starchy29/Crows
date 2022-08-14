@@ -6,47 +6,27 @@ using UnityEngine;
 // a character in combat
 public class CharacterScript : MonoBehaviour
 {
-    protected BattleManager manager;
+    private HealthBar hpBar;
 
     // health
-    [SerializeField] private int maxHealth;
-    protected int health;
-    public int Health {
-        get { return health; }
-        set {
-            if(!IsAlive) {
-                return;
-            }
-            if(value > maxHealth) {
-                health = maxHealth;
-            }
-            else if(value < 0) {
-                health = 0;
-            }
-            else {
-                health = value;
-            }
-            UpdateHealthBar();
-        }
-    }
+    [SerializeField] private uint maxHealth;
+    protected uint health;
+    public uint Health { get { return health; } }
     public bool IsAlive { get { return health > 0; } }
 
     // move selection
     private TurnMove selectedMove;
     protected List<TurnMove> moveList;
     public TurnMove SelectedMove { get { return selectedMove; } }
-    public void SelectMove(String name, List<CharacterScript> targets = null) { // can use null to select none
+    public void SelectMove(String name) { // can use null to select none
         selectedMove = moveList.Find((TurnMove check) => { return check.Name.Equals(name); });
-        if(selectedMove != null) {
-            selectedMove.Targets = targets;
-        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
-        manager = GameObject.Find("Battle Manager").GetComponent<BattleManager>();
+        hpBar = transform.GetChild(0).GetComponent<HealthBar>();
         moveList = new List<TurnMove>();
         selectedMove = null;
         AddMoves();
@@ -54,24 +34,29 @@ public class CharacterScript : MonoBehaviour
         // temp
         moveList.Add(new TurnMove("Attack", 0, this, 
             (CharacterScript user, List<CharacterScript> targets) => {
-                targets[0].Health -= 1;
+                targets[0].TakeDamage(1);
             },
-            new Animation()
+            new Animation(),
+            TurnMove.GroundTarget
         ));
     }
 
-    protected virtual void AddMoves() { } // sub classes can add their specific moves
-
-    private void UpdateHealthBar() {
-        GameObject hpBar = gameObject.transform.GetChild(0).gameObject;
-        GameObject hpBack = gameObject.transform.GetChild(1).gameObject;
-        Vector3 newScale = hpBack.transform.localScale;
-        newScale.x *= (float)health / maxHealth;
-        float shift = (hpBack.transform.localScale.x - newScale.x) / 2; // keep left-justified
-        hpBar.transform.localScale = newScale;
-        Vector3 newPos = hpBack.transform.position;
-        newPos.x -= shift;
-        newPos.z = -1; // make sure color lies over back
-        hpBar.transform.position = newPos;
+    public void Heal(uint amount) {
+        health += amount;
+        if(health > maxHealth) {
+            health = maxHealth;
+        }
+        hpBar.Increase(amount, (float)health / maxHealth);
     }
+
+    public void TakeDamage(uint amount) {
+        if(amount > health) {
+            health = 0;
+        } else {
+            health -= amount;
+        }
+        hpBar.Reduce(amount, (float)health / maxHealth);
+    }
+
+    protected virtual void AddMoves() { } // sub classes can add their specific moves
 }

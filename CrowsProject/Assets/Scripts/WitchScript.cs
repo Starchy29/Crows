@@ -12,6 +12,6 @@ public class WitchScript : CharacterScript
     // button move selectors
     public void SelectAttack()
     {
-        SelectMove("Attack", new List<CharacterScript>() { manager.Enemies[0] });
+        SelectMove("Attack");
     }
 }

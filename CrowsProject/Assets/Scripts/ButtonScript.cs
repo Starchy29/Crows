@@ -8,17 +8,17 @@ public class ButtonScript : MonoBehaviour
     [SerializeField] private Color regularColor;
     [SerializeField] private Color selectedColor;
     [SerializeField] private UnityEvent clickEvent;
+    public List<GameObject> ToolTips; // things that show only when this button is hovered
+
     private Rect box;
-    public ButtonGroup Group { get; set; } // must not be null
+    public Menu Group { get; set; } // must not be null
 
     private Dictionary<Direction, ButtonScript> closestNeighbors;
 
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 pos = gameObject.transform.position;
-        Vector3 scale = gameObject.transform.localScale;
-        box = new Rect(pos.x - scale.x / 2, pos.y - scale.y / 2, scale.x, scale.y);
+        SetBox();
 
         closestNeighbors = new Dictionary<Direction, ButtonScript>();
         closestNeighbors[Direction.Up] = null;
@@ -29,10 +29,16 @@ public class ButtonScript : MonoBehaviour
 
     public void Select() {
         gameObject.GetComponent<SpriteRenderer>().color = selectedColor;
+        foreach(GameObject tooltip in ToolTips) {
+            tooltip.SetActive(true);
+        }
     }
 
     public void Deselect() {
         gameObject.GetComponent<SpriteRenderer>().color = regularColor;
+        foreach(GameObject tooltip in ToolTips) {
+            tooltip.SetActive(false);
+        }
     }
 
     public void Click() {
@@ -93,5 +99,12 @@ public class ButtonScript : MonoBehaviour
 
         closestNeighbors[direction] = closestOption;
         return closestOption;
+    }
+
+    // saves a rectangle that matches the button's shape
+    public void SetBox() {
+        Vector3 pos = gameObject.transform.position;
+        Vector3 scale = gameObject.transform.localScale;
+        box = new Rect(pos.x - scale.x / 2, pos.y - scale.y / 2, scale.x, scale.y);
     }
 }
