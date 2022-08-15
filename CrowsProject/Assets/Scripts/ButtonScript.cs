@@ -13,18 +13,10 @@ public class ButtonScript : MonoBehaviour
     private Rect box;
     public Menu Group { get; set; } // must not be null
 
-    private Dictionary<Direction, ButtonScript> closestNeighbors;
-
     // Start is called before the first frame update
     void Start()
     {
         SetBox();
-
-        closestNeighbors = new Dictionary<Direction, ButtonScript>();
-        closestNeighbors[Direction.Up] = null;
-        closestNeighbors[Direction.Down] = null;
-        closestNeighbors[Direction.Left] = null;
-        closestNeighbors[Direction.Right] = null;
     }
 
     public void Select() {
@@ -46,18 +38,16 @@ public class ButtonScript : MonoBehaviour
     }
 
     // finds the best button to go to based on the input direction. loops around the screen if necessary
-    public ButtonScript GetClosestNeighbor(Direction direction) {
+    public ButtonScript GetClosestNeighbor(Direction direction, List<ButtonScript> buttons = null) {
         // check if this has been calculated before
-        ButtonScript check = closestNeighbors[direction];
-        if(check != null) {
-            return check;
-        }
-
         ButtonScript closestOption = this;
         Vector2 screenDims = new Vector2(18, 10); // estimate
         float closestDistance = (direction == Direction.Left || direction == Direction.Right ? screenDims.x : screenDims.y);
 
-        foreach(ButtonScript other in Group.Buttons) {
+        if(buttons == null) {
+            buttons = Group.Buttons;
+        }
+        foreach(ButtonScript other in buttons) {
             if(other == this) {
                 continue;
             }
@@ -97,7 +87,6 @@ public class ButtonScript : MonoBehaviour
             }
         }
 
-        closestNeighbors[direction] = closestOption;
         return closestOption;
     }
 

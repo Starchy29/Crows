@@ -60,9 +60,16 @@ public class Menu : MonoBehaviour
 
     public void Open() {
         gameObject.SetActive(true);
+        if(buttons.Count > 0) {
+            Selected = buttons[0];
+            Selected.Select();
+        }
     }
 
     public void Close() {
         gameObject.SetActive(false);
+        if(Selected != null) {
+            Selected.Deselect();
+        }
     }
 }

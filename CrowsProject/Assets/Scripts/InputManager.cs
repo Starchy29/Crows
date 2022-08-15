@@ -58,7 +58,7 @@ public class InputManager : MonoBehaviour
     }
 
     public bool ConfirmJustPressed() {
-        return Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.JoystickButton2);
+        return Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.JoystickButton2);
     }
 
     public bool CancelJustPressed() {

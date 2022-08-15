@@ -7,7 +7,9 @@ public class HunterScript : CharacterScript
     protected override void AddMoves() {
         moveList.Add(new TurnMove("Heal", 0, this,
             (CharacterScript user, List<CharacterScript> targets) => {
-                user.Heal(2);
+                foreach(CharacterScript character in targets) {
+                    character.Heal(2); 
+                }
             },
             new Animation(),
             null
@@ -23,6 +25,6 @@ public class HunterScript : CharacterScript
 
     public void SelectHeal() {
         SelectMove("Heal");
-        //manager.gameObject.GetComponent<ButtonEvents>().ReturnToCharacterSelect();
+        Global.Inst.EnemySelectMenu.OpenAndSetupAlly(SelectedMove, Global.Inst.HunterMenu, false);
     }
 }

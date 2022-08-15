@@ -89,6 +89,9 @@ public class BattleManager : MonoBehaviour
                         // end animation phase
                         IsMoveSelect = true;
                         ChooseMoves(); // can make decisions based on what player selected this turn
+                        foreach(CharacterScript character in players) { // clear selected moves
+                            character.SelectMove(null);
+                        }
                         // add ability points
                         Global.Inst.CharacterSelectMenu.Open();
                     } else {
@@ -121,7 +124,7 @@ public class BattleManager : MonoBehaviour
             }
         }
         foreach(CharacterScript enemy in enemies) {
-            if(enemy.SelectedMove != null) {
+            if(enemy != null && enemy.SelectedMove != null) {
                 turnOrder.Add(enemy.SelectedMove);
             }
         }

@@ -928,9 +928,17 @@ PrefabInstance:
       value: 0.20825914
       objectReference: {fileID: 0}
     - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
+      propertyPath: ToolTips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: toolTips.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
+      propertyPath: ToolTips.Array.data[0]
+      value: 
+      objectReference: {fileID: 619089490}
     - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: toolTips.Array.data[0]
       value: 
@@ -1123,9 +1131,17 @@ PrefabInstance:
       value: 0.20825914
       objectReference: {fileID: 0}
     - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
+      propertyPath: ToolTips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: toolTips.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
+      propertyPath: ToolTips.Array.data[0]
+      value: 
+      objectReference: {fileID: 2026177280}
     - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: toolTips.Array.data[0]
       value: 
@@ -1396,7 +1412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d521b979f8564fd48b2b0319373daa0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
+  maxHealth: 20
 --- !u!1001 &1452921822
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2092,9 +2108,17 @@ PrefabInstance:
       value: 0.20825914
       objectReference: {fileID: 0}
     - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
+      propertyPath: ToolTips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: toolTips.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
+      propertyPath: ToolTips.Array.data[0]
+      value: 
+      objectReference: {fileID: 1972762374}
     - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: toolTips.Array.data[0]
       value: 
@@ -2172,6 +2196,11 @@ MonoBehaviour:
   - {fileID: 405417421}
   - {fileID: 1935054106}
   - {fileID: 1493893964}
+  allyButtons:
+  - {fileID: 1188547204}
+  - {fileID: 766049254}
+  - {fileID: 731471568}
+  - {fileID: 1676042232}
 --- !u!1001 &1935054105
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2600,9 +2629,17 @@ PrefabInstance:
       value: 0.20825914
       objectReference: {fileID: 0}
     - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
+      propertyPath: ToolTips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: toolTips.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
+      propertyPath: ToolTips.Array.data[0]
+      value: 
+      objectReference: {fileID: 1526085960}
     - target: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: toolTips.Array.data[0]
       value: 
