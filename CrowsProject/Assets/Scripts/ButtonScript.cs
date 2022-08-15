@@ -5,8 +5,8 @@ using UnityEngine.Events;
 
 public class ButtonScript : MonoBehaviour
 {
-    [SerializeField] private Color regularColor;
-    [SerializeField] private Color selectedColor;
+    public Color regularColor;
+    public Color selectedColor;
     [SerializeField] private UnityEvent clickEvent;
     public List<GameObject> ToolTips; // things that show only when this button is hovered
 

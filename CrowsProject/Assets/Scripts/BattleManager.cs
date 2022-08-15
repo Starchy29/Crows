@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +5,11 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     [SerializeField] private GameObject characterPrefab;
+    [SerializeField] private ButtonScript[] enemyButtons;
 
     private bool IsMoveSelect = true; // false: turn animation is playing
 
-    private int abilityPoints;
+    public int AbilityPoints { get; set; }
 
     // character positions
     private CharacterScript[] players; // the player's characters
@@ -37,27 +37,12 @@ public class BattleManager : MonoBehaviour
 
         turnOrder = new List<TurnMove>();
 
-        playerPositions = new Vector3[4];
-        for(int i = 0; i < 4; i++) {
-            playerPositions[i] = new Vector3(-1.5f - 2.2f * i, -2, 0);
-        }
-
         players[0] = Global.Inst.Cultist;
         players[1] = Global.Inst.Hunter;
         players[2] = Global.Inst.Demon;
         players[3] = Global.Inst.Witch;
 
-        // position players and their selectors
-        List<ButtonScript> selectButtons = Global.Inst.CharacterSelectMenu.Buttons;
-        for(int i = 0; i < players.Length; i++) {
-            Vector3 pos = playerPositions[i];
-            players[i].gameObject.transform.position = pos;
-            pos.y += 2;
-            selectButtons[i].gameObject.transform.position = pos;
-            selectButtons[i].SetBox();
-        }
-
-        // temp
+        // Spawn in enemies
         GameObject enemy = Instantiate(characterPrefab);
         enemy.GetComponent<SpriteRenderer>().color = Color.red;
         enemy.transform.position = new Vector3(5, 0, 0);
@@ -67,6 +52,50 @@ public class BattleManager : MonoBehaviour
         enemy.GetComponent<SpriteRenderer>().color = Color.red;
         enemy.transform.position = new Vector3(8, 0, 0);
         enemies[1] = enemy.GetComponent<CharacterScript>();
+
+        // position players, enemies, and their selectors
+        const float charY = -2f;
+        const float selectorRise = 1.5f; // distance above characters
+        const float fliersRise = 3f; // distance above grounded enemies
+        const float characterGap = 1.5f;
+        playerPositions = new Vector3[4];
+        enemyPositions = new Vector3[4];
+        flierPositions = new Vector3[4];
+        for(int i = 0; i < 4; i++) {
+            playerPositions[i] = new Vector3(-2.5f - characterGap * i, charY, 0);
+            enemyPositions[i] = new Vector3(2.5f + characterGap * i, charY, 0);
+            flierPositions[i] = new Vector3(2.5f + characterGap * i, charY + fliersRise, 0);
+        }
+
+        List<ButtonScript> selectButtons = Global.Inst.CharacterSelectMenu.Buttons;
+        for(int i = 0; i < players.Length; i++) {
+            Vector3 playPos = playerPositions[i];
+            if(players[i] != null) {
+                players[i].gameObject.transform.position = playPos;
+            }
+
+            playPos.y += selectorRise;
+            selectButtons[i].gameObject.transform.position = playPos;
+            selectButtons[i].SetBox();
+
+            Vector2 enemyPos = enemyPositions[i];
+            if(enemies[i] != null) {
+                enemies[i].gameObject.transform.position = enemyPos;
+            }
+
+            enemyPos.y += selectorRise;
+            enemyButtons[i].gameObject.transform.position = enemyPos;
+            enemyButtons[i].SetBox();
+
+            Vector2 flierPos = flierPositions[i];
+            if(fliers[i] != null) {
+                fliers[i].gameObject.transform.position = flierPos;
+            }
+
+            flierPos.y += selectorRise;
+            enemyButtons[i + 4].gameObject.transform.position = flierPos;
+            enemyButtons[i + 4].SetBox();
+        }
 
         // make the battle start with a pause so the enemy can choose moves
         IsMoveSelect = false;
@@ -78,7 +107,7 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         if(IsMoveSelect) {
-
+            //...?
         } else { // animation phase
             if(waitBetweenMoves > 0) {
                 // pausing
@@ -92,7 +121,7 @@ public class BattleManager : MonoBehaviour
                         foreach(CharacterScript character in players) { // clear selected moves
                             character.SelectMove(null);
                         }
-                        // add ability points
+                        AbilityPoints += 7;
                         Global.Inst.CharacterSelectMenu.Open();
                     } else {
                         // run next move
@@ -143,9 +172,9 @@ public class BattleManager : MonoBehaviour
             if(enemy == null) {
                 continue;
             }
-
+            
             enemy.SelectMove("Attack");
-            enemy.SelectedMove.Targets = new List<CharacterScript>() { players[1] };
+            enemy.SelectedMove.Targets = new List<CharacterScript>() { players[Random.Range(0, 4)] };
         }
     }
 }

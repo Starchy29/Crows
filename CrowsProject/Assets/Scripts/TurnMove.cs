@@ -29,11 +29,46 @@ public class TurnMove
     private List<int[]> targetGroups; // each element is a group of enemies/allies that are targeted, 0-3 ground 4-7 air front to back
     public List<int[]> TargetGroups { get { return targetGroups; } }
 
+    public int RequiredPosition { get; set; } // any by default
+    public CharacterScript RequiredPartner { get; set; } // allies only
+    public int Cost { get; set; }
+    public bool CanUse() {
+        if(Cost > Global.Inst.BattleManager.AbilityPoints) {
+            return false;
+        }
+
+        if(RequiredPosition >= 0 && user.GetPosition() != RequiredPosition) {
+            return false;
+        }
+
+        if(RequiredPartner != null) {
+            // allies only
+            int[] adjacents = new int[2];
+            int pos = user.GetPosition();
+            adjacents[0] = pos + 1;
+            adjacents[0] = pos - 1;
+
+            bool foundPartner = false;
+            foreach(int index in adjacents) {
+                if(index < 0 || index > 3) {
+                    continue;
+                }
+
+                if(Global.Inst.BattleManager.Players[index] == RequiredPartner) {
+                    foundPartner = true;
+                }
+            }
+            if(!foundPartner) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private String name;
-    private int cost;
     
     public String Name { get { return name; } }
-    public int Cost { get { return cost; } }
 
     // animation process tracking
     private bool running;
@@ -43,14 +78,15 @@ public class TurnMove
     private CharacterScript user;
     public List<CharacterScript> Targets { get; set; }
 
-    public TurnMove(String name, int cost, CharacterScript user, MoveEffect effect, Animation animation, List<int[]> targetType) {
+    public TurnMove(String name, CharacterScript user, MoveEffect effect, Animation animation, List<int[]> targetType) {
         running = false;
         this.name = name;
-        this.cost = cost;
         this.user = user;
         this.moveEffect = effect;
         this.animationBlueprint = animation;
         this.targetGroups = targetType;
+        RequiredPosition = -1; // means any position
+        Cost = 0;
     }
 
     // executes the move's animation, ending with the mechanical effect

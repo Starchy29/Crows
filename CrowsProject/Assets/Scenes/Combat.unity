@@ -366,7 +366,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 296865715}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.7066499, y: -0.3188463, z: 0.13573614}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -400,7 +400,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297445490}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.74850327, y: -0.079151794, z: 0.03536519}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -420,6 +420,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 4847846250310284585, guid: b25134ec61c2c234ba66ec541f9f0ad6, type: 3}
+  enemyButtons:
+  - {fileID: 1101143798}
+  - {fileID: 1497182512}
+  - {fileID: 279980729}
+  - {fileID: 1460245278}
+  - {fileID: 1452921823}
+  - {fileID: 405417421}
+  - {fileID: 1935054106}
+  - {fileID: 1493893964}
 --- !u!114 &297445493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,9 +461,9 @@ MonoBehaviour:
   characterSelectMenu: {fileID: 1668953240}
   enemySelectMenu: {fileID: 1860114533}
   hunterMenu: {fileID: 925882753}
-  cultistMenu: {fileID: 0}
-  demonMenu: {fileID: 0}
-  witchMenu: {fileID: 0}
+  cultistMenu: {fileID: 1974630353}
+  demonMenu: {fileID: 2090929052}
+  witchMenu: {fileID: 1918814270}
 --- !u!1001 &353246097
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -670,6 +679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4add9cad0e831244d88b9fb72a1d4f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAlly: 1
   maxHealth: 30
 --- !u!1 &579113903
 GameObject:
@@ -842,6 +852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81003ca66a22eb4ca97e09e139bd904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAlly: 1
   maxHealth: 15
 --- !u!1 &619089490 stripped
 GameObject:
@@ -1011,6 +1022,7 @@ GameObject:
   m_Component:
   - component: {fileID: 925882752}
   - component: {fileID: 925882753}
+  - component: {fileID: 925882754}
   m_Layer: 0
   m_Name: Hunter Menu
   m_TagString: Untagged
@@ -1033,7 +1045,7 @@ Transform:
   - {fileID: 1959222613}
   - {fileID: 175173795}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &925882753
 MonoBehaviour:
@@ -1051,6 +1063,22 @@ MonoBehaviour:
   - {fileID: 1959222614}
   - {fileID: 231958949}
   previous: {fileID: 1668953240}
+--- !u!114 &925882754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925882751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad46446b706a064991d6904460e5e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  user: {fileID: 619089489}
+  names:
+  - Attack
+  - Heal
 --- !u!1001 &932397430
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1173,6 +1201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 299645ec3084abc448309cf5e9420426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAlly: 1
   maxHealth: 10
 --- !u!1001 &1101143797
 PrefabInstance:
@@ -1412,6 +1441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d521b979f8564fd48b2b0319373daa0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAlly: 1
   maxHealth: 20
 --- !u!1001 &1452921822
 PrefabInstance:
@@ -1972,7 +2002,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1668953239
 Transform:
   m_ObjectHideFlags: 0
@@ -2157,7 +2187,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1860114530}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2171,7 +2201,7 @@ Transform:
   - {fileID: 1935054107}
   - {fileID: 1493893965}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1860114533
 MonoBehaviour:
@@ -2201,6 +2231,52 @@ MonoBehaviour:
   - {fileID: 766049254}
   - {fileID: 731471568}
   - {fileID: 1676042232}
+--- !u!1 &1918814269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1918814271}
+  - component: {fileID: 1918814270}
+  m_Layer: 0
+  m_Name: Witch Menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1918814270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918814269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207dbbfe9a4541c4ebc00ff898c2315d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttons: []
+  previous: {fileID: 1668953240}
+--- !u!4 &1918814271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918814269}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1935054105
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2474,6 +2550,52 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3925255922256089262, guid: b25134ec61c2c234ba66ec541f9f0ad6, type: 3}
   m_PrefabInstance: {fileID: 1972762373}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1974630352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1974630354}
+  - component: {fileID: 1974630353}
+  m_Layer: 0
+  m_Name: Cultist Menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1974630353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974630352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207dbbfe9a4541c4ebc00ff898c2315d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttons: []
+  previous: {fileID: 1668953240}
+--- !u!4 &1974630354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974630352}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2026177279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2549,6 +2671,52 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3925255922256089262, guid: b25134ec61c2c234ba66ec541f9f0ad6, type: 3}
   m_PrefabInstance: {fileID: 2026177279}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2090929051
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2090929053}
+  - component: {fileID: 2090929052}
+  m_Layer: 0
+  m_Name: Demon Menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &2090929052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090929051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207dbbfe9a4541c4ebc00ff898c2315d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttons: []
+  previous: {fileID: 1668953240}
+--- !u!4 &2090929053
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090929051}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2144785788
 PrefabInstance:
   m_ObjectHideFlags: 0
