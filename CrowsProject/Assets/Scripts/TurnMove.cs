@@ -71,15 +71,16 @@ public class TurnMove
     public String Name { get { return name; } }
 
     // animation process tracking
-    private bool running;
-    private Animation activeAnimation;
-    public bool Running { get { return running; } }
+    //private Animation activeAnimation;
+    //private bool running;
+    //public bool Running { get { return running; } }
 
     private CharacterScript user;
     public List<CharacterScript> Targets { get; set; }
+    public TurnMove NextMove { get; set; }
 
     public TurnMove(String name, CharacterScript user, MoveEffect effect, Animation animation, List<int[]> targetType) {
-        running = false;
+        //running = false;
         this.name = name;
         this.user = user;
         this.moveEffect = effect;
@@ -91,17 +92,21 @@ public class TurnMove
 
     // executes the move's animation, ending with the mechanical effect
     public void Run() {
-        running = true;
+        //running = true;
         activeAnimation = animationBlueprint.Copy();
+        activeAnimation.OnComplete = () => { 
+            moveEffect(user, Targets);
+
+        };
     }
 
-    public void Update() {
-        activeAnimation.Update();
-        if(activeAnimation.Complete) {
-            running = false;
-            moveEffect(user, Targets);
-        }
-    }
+    //public void Update() {
+    //    activeAnimation.Update();
+    //    if(activeAnimation.Complete) {
+    //        running = false;
+    //        moveEffect(user, Targets);
+    //    }
+    //}
 
     // common target types
     public static readonly List<int[]> AnyTarget = new List<int[]>() { 

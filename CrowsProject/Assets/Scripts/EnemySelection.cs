@@ -195,6 +195,19 @@ public class EnemySelection : Menu
             // go to previous menu
             Close();
             previous.Open();
+            // deselect this move
+            if(previous == Global.Inst.CultistMenu) {
+                Global.Inst.Cultist.Deselect();
+            }
+            else if(previous == Global.Inst.HunterMenu) {
+                Global.Inst.Hunter.Deselect();
+            }
+            else if(previous == Global.Inst.DemonMenu) {
+                Global.Inst.Demon.Deselect();
+            }
+            else if(previous == Global.Inst.WitchMenu) {
+                Global.Inst.Witch.Deselect();
+            }
         }
         else if(input.JustPressed(Direction.Up)) {
             FullDeselect();

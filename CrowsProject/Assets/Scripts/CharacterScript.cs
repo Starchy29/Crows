@@ -35,6 +35,13 @@ public class CharacterScript : MonoBehaviour
 
         return false;
     }
+    // undoes a move selection and refunds ability points
+    public void Deselect() {
+        if(selectedMove != null) {
+            Global.Inst.BattleManager.AbilityPoints += selectedMove.Cost;
+            selectedMove = null;
+        }
+    }
     public bool IsMoveUsable(String name) { // used to gray out unusable buttons
         return moveList.Find((TurnMove check) => { return check.Name.Equals(name); }).CanUse();
     }

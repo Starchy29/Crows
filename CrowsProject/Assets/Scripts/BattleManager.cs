@@ -18,9 +18,9 @@ public class BattleManager : MonoBehaviour
     public CharacterScript[] Players { get { return players; } }
     public CharacterScript[] Enemies { get { return enemies; } }
     public CharacterScript[] Fliers { get { return fliers; } }
-    private Vector3[] playerPositions;
-    private Vector3[] enemyPositions;
-    private Vector3[] flierPositions;
+    public readonly Vector3[] playerPositions = new Vector3[4];
+    public readonly Vector3[] enemyPositions = new Vector3[4];
+    public Vector3[] flierPositions = new Vector3[4];
 
     // turn execution
     List<TurnMove> turnOrder;
@@ -58,9 +58,6 @@ public class BattleManager : MonoBehaviour
         const float selectorRise = 1.5f; // distance above characters
         const float fliersRise = 3f; // distance above grounded enemies
         const float characterGap = 1.5f;
-        playerPositions = new Vector3[4];
-        enemyPositions = new Vector3[4];
-        flierPositions = new Vector3[4];
         for(int i = 0; i < 4; i++) {
             playerPositions[i] = new Vector3(-2.5f - characterGap * i, charY, 0);
             enemyPositions[i] = new Vector3(2.5f + characterGap * i, charY, 0);

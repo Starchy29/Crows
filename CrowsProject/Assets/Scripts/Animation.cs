@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Animation
+public class Animation : MonoBehaviour
 {
-    private bool complete;
-    public bool Complete { get { return complete; } }
+    public EventType OnComplete { get; set; }
 
     public Animation() {
-        complete = false;
     }
 
-    public void Update()
+    void Update()
     {
-        complete = true;
+        OnComplete();
+        // delete self?
     }
 
     public Animation Copy() {
+        // to do: make this copy
         return this;
     }
 }

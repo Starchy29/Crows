@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void EventType();
+
 public class Global : MonoBehaviour
 {
     private static Global inst;
