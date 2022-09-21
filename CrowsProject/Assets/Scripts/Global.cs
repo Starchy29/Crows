@@ -9,7 +9,7 @@ public class Global : MonoBehaviour
     private static Global inst;
     public static Global Inst { get { return inst; } }
 
-    void Start()
+    void Awake()
     {
         inst = this;
     }

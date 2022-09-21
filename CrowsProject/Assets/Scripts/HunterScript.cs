@@ -11,10 +11,8 @@ public class HunterScript : CharacterScript
                     character.Heal(2); 
                 }
             },
-            new Animation(),
             null // targets allies
         );
-        heal.RequiredPosition = 0;
         moveList.Add(heal);
     }
 

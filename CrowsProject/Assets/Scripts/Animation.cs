@@ -6,17 +6,15 @@ public class Animation : MonoBehaviour
 {
     public EventType OnComplete { get; set; }
 
-    public Animation() {
-    }
-
     void Update()
     {
+        // end animation
         OnComplete();
-        // delete self?
+        Destroy(this);
     }
 
-    public Animation Copy() {
-        // to do: make this copy
+    public Animation CopyFrom(Animation other) {
+        // to do: make this copy from the other animation
         return this;
     }
 }

@@ -22,7 +22,7 @@ public enum Aim {
 public class TurnMove
 {
     // move definition
-    private readonly Animation animationBlueprint;
+    public Animation AnimationBlueprint { get; set; }
     public delegate void MoveEffect(CharacterScript user, List<CharacterScript> targets);
     private MoveEffect moveEffect;
 
@@ -70,7 +70,8 @@ public class TurnMove
     
     public String Name { get { return name; } }
 
-    // animation process tracking
+    // execution process tracking
+
     //private Animation activeAnimation;
     //private bool running;
     //public bool Running { get { return running; } }
@@ -79,12 +80,11 @@ public class TurnMove
     public List<CharacterScript> Targets { get; set; }
     public TurnMove NextMove { get; set; }
 
-    public TurnMove(String name, CharacterScript user, MoveEffect effect, Animation animation, List<int[]> targetType) {
+    public TurnMove(String name, CharacterScript user, MoveEffect effect, List<int[]> targetType) {
         //running = false;
         this.name = name;
         this.user = user;
         this.moveEffect = effect;
-        this.animationBlueprint = animation;
         this.targetGroups = targetType;
         RequiredPosition = -1; // means any position
         Cost = 0;
@@ -93,10 +93,11 @@ public class TurnMove
     // executes the move's animation, ending with the mechanical effect
     public void Run() {
         //running = true;
-        activeAnimation = animationBlueprint.Copy();
+        Animation activeAnimation = user.gameObject.AddComponent<Animation>();
+        activeAnimation.CopyFrom(AnimationBlueprint);
         activeAnimation.OnComplete = () => { 
             moveEffect(user, Targets);
-
+            Global.Inst.BattleManager.CompleteMove();
         };
     }
 

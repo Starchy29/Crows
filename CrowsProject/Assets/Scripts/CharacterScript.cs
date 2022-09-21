@@ -56,13 +56,15 @@ public class CharacterScript : MonoBehaviour
         AddMoves();
         
         // temp
-        moveList.Add(new TurnMove("Attack", this, 
+        TurnMove attack = new TurnMove("Attack", this, 
             (CharacterScript user, List<CharacterScript> targets) => {
                 targets[0].TakeDamage(1);
             },
-            new Animation(),
             TurnMove.GroundTarget
-        ));
+        );
+        //attack.
+        moveList.Add(attack);
+
     }
 
     // position in the line of characters

@@ -23,8 +23,7 @@ public class BattleManager : MonoBehaviour
     public Vector3[] flierPositions = new Vector3[4];
 
     // turn execution
-    List<TurnMove> turnOrder;
-    private byte currentMove;
+    private TurnMove currentMove;
     private float waitBetweenMoves;
     private const float PAUSE_BETWEEN_MOVES = 0.5f;
 
@@ -34,8 +33,6 @@ public class BattleManager : MonoBehaviour
         players = new CharacterScript[4];
         enemies = new CharacterScript[4];
         fliers = new CharacterScript[4];
-
-        turnOrder = new List<TurnMove>();
 
         players[0] = Global.Inst.Cultist;
         players[1] = Global.Inst.Hunter;
@@ -96,7 +93,7 @@ public class BattleManager : MonoBehaviour
 
         // make the battle start with a pause so the enemy can choose moves
         IsMoveSelect = false;
-        currentMove = 0;
+        currentMove = null;
         waitBetweenMoves = PAUSE_BETWEEN_MOVES;
     }
 
@@ -106,12 +103,11 @@ public class BattleManager : MonoBehaviour
         if(IsMoveSelect) {
             //...?
         } else { // animation phase
-            if(waitBetweenMoves > 0) {
-                // pausing
+            if(waitBetweenMoves > 0) { // pausing between moves
                 waitBetweenMoves -= Time.deltaTime;
                 if(waitBetweenMoves <= 0) {
-                    currentMove++;
-                    if(currentMove >= turnOrder.Count) {
+                    // done with pause
+                    if(currentMove == null) { 
                         // end animation phase
                         IsMoveSelect = true;
                         ChooseMoves(); // can make decisions based on what player selected this turn
@@ -120,20 +116,19 @@ public class BattleManager : MonoBehaviour
                         }
                         AbilityPoints += 7;
                         Global.Inst.CharacterSelectMenu.Open();
-                    } else {
+                    } else { 
                         // run next move
-                        turnOrder[currentMove].Run();
+                        currentMove.Run();
                     }
                 }
             }
-            else if(!turnOrder[currentMove].Running) { // check for turn end
-                // begin pause that leads into next move
-                waitBetweenMoves = PAUSE_BETWEEN_MOVES;
-            }
-            else {
-                turnOrder[currentMove].Update();
-            }
         }
+    }
+
+    // called when a move is completed, starts the pause before running the next move
+    public void CompleteMove() {
+        waitBetweenMoves = PAUSE_BETWEEN_MOVES;
+        currentMove = currentMove.NextMove;
     }
 
     // click event for when the player locks in their moves for the turn
@@ -143,24 +138,28 @@ public class BattleManager : MonoBehaviour
 
         // determine turn order
         // temp: players then enemies
-        turnOrder.Clear();
+        List<TurnMove> moveOrder = new List<TurnMove>();
         foreach(CharacterScript player in players) {
             if(player.SelectedMove != null) {
-                turnOrder.Add(player.SelectedMove);
+                moveOrder.Add(player.SelectedMove);
             }
         }
         foreach(CharacterScript enemy in enemies) {
             if(enemy != null && enemy.SelectedMove != null) {
-                turnOrder.Add(enemy.SelectedMove);
+                moveOrder.Add(enemy.SelectedMove);
             }
         }
+        currentMove = moveOrder[0];
+        for(int i = 1; i < moveOrder.Count; i++) {
+            moveOrder[i - 1].NextMove = moveOrder[i];
+        }
+        moveOrder[moveOrder.Count - 1].NextMove = null;
         // add fliers later
 
         // begin animation process
         IsMoveSelect = false;
-        currentMove = 0;
         waitBetweenMoves = 0;
-        turnOrder[currentMove].Run();
+        currentMove.Run();
     }
 
     // enemy AI
