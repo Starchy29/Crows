@@ -29,6 +29,8 @@ public class TurnMove
     private List<int[]> targetGroups; // each element is a group of enemies/allies that are targeted, 0-3 ground 4-7 air front to back
     public List<int[]> TargetGroups { get { return targetGroups; } }
 
+    public List<Vector2> Swaps; // if not null, this move is a character swap. Stores pairs of positions that are swapped
+
     public int RequiredPosition { get; set; } // any by default
     public CharacterScript RequiredPartner { get; set; } // allies only
     public int Cost { get; set; }

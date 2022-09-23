@@ -6,10 +6,10 @@ using UnityEngine;
 public class EnemySelection : Menu
 {
     [SerializeField] private ButtonScript[] buttonSlots; // 0-3 ground, 4-7 air, front to back
-    [SerializeField] private ButtonScript[] allyButtons; // 0-3 is cultist, hunter, demon, witch
+    //[SerializeField] private ButtonScript[] allyButtons; // 0-3 is cultist, hunter, demon, witch
     private List<List<ButtonScript>> buttonGroups;
     private TurnMove selectingMove;
-    private bool allySelect; // false: select enemy
+    //private bool allySelect; // false: select enemy
     private List<ButtonScript> orderedAllies;
 
     void Start()
@@ -25,7 +25,7 @@ public class EnemySelection : Menu
 
     // sets up the enemy buttons to match the selection type of the selected move
     public void OpenAndSetup(TurnMove selector, Menu opener) {
-        allySelect = false;
+        //allySelect = false;
         selectingMove = selector;
         previous = opener;
         opener.Close();
@@ -84,7 +84,7 @@ public class EnemySelection : Menu
     }
 
     // variant that selects allies. If user is null, it can select any of the four allies, else it targets the user only
-    public void OpenAndSetupAlly(TurnMove selector, Menu opener, bool selectAll, CharacterScript user = null) {
+    /*public void OpenAndSetupAlly(TurnMove selector, Menu opener, bool selectAll, CharacterScript user = null) {
         allySelect = true;
         selectingMove = selector;
         previous = opener;
@@ -149,12 +149,12 @@ public class EnemySelection : Menu
 
         Selected = buttons[0];
         FullSelect();
-    }
+    }*/
 
     void Update() {
         if(input.ConfirmJustPressed()) {
             // pass targets to selected move
-            if(allySelect) {
+            /*if(allySelect) {
                 // set character select back to normal
                 Global.Inst.CharacterSelectMenu.gameObject.SetActive(false);
                 Global.Inst.CharacterSelectMenu.gameObject.GetComponent<Menu>().enabled = true; // allow regular menu to work
@@ -173,19 +173,19 @@ public class EnemySelection : Menu
                 } else {
                     selectingMove.Targets.Add(Global.Inst.BattleManager.Players[orderedAllies.IndexOf(Selected)]);
                 }
-            } else {
-                List<ButtonScript> chosenGroup = buttonGroups[Buttons.IndexOf(Selected)];
-                chosenGroup.Add(Selected);
-                selectingMove.Targets = new List<CharacterScript>();
-                foreach(ButtonScript button in chosenGroup) {
-                    int slot = Buttons.IndexOf(Selected);
-                    if(slot < 4) {
-                        selectingMove.Targets.Add(Global.Inst.BattleManager.Enemies[slot]);
-                    } else {
-                        selectingMove.Targets.Add(Global.Inst.BattleManager.Fliers[slot - 4]);
-                    }
+            } else {*/
+            List<ButtonScript> chosenGroup = buttonGroups[Buttons.IndexOf(Selected)];
+            chosenGroup.Add(Selected);
+            selectingMove.Targets = new List<CharacterScript>();
+            foreach(ButtonScript button in chosenGroup) {
+                int slot = Buttons.IndexOf(Selected);
+                if(slot < 4) {
+                    selectingMove.Targets.Add(Global.Inst.BattleManager.Enemies[slot]);
+                } else {
+                    selectingMove.Targets.Add(Global.Inst.BattleManager.Fliers[slot - 4]);
                 }
             }
+            //}
 
             // close menu
             Close();
@@ -233,9 +233,6 @@ public class EnemySelection : Menu
 
     private void FullDeselect() {
         foreach(ButtonScript button in buttonSlots) {
-            button.Deselect();
-        }
-        foreach(ButtonScript button in allyButtons) {
             button.Deselect();
         }
     }

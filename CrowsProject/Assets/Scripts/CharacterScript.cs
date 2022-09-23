@@ -39,6 +39,12 @@ public class CharacterScript : MonoBehaviour
     public void Deselect() {
         if(selectedMove != null) {
             Global.Inst.BattleManager.AbilityPoints += selectedMove.Cost;
+            if(selectedMove.Swaps != null) {
+                // swap back and cancel selected moves in case it is no longer legal
+                foreach(Vector2 swap in selectedMove.Swaps) {
+
+                }
+            }
             selectedMove = null;
         }
     }

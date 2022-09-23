@@ -62,6 +62,7 @@ public class BattleManager : MonoBehaviour
         }
 
         List<ButtonScript> selectButtons = Global.Inst.CharacterSelectMenu.Buttons;
+        List<ButtonScript> targetButtons = Global.Inst.AllySelectMenu.Buttons;
         for(int i = 0; i < players.Length; i++) {
             Vector3 playPos = playerPositions[i];
             if(players[i] != null) {
@@ -71,6 +72,8 @@ public class BattleManager : MonoBehaviour
             playPos.y += selectorRise;
             selectButtons[i].gameObject.transform.position = playPos;
             selectButtons[i].SetBox();
+            targetButtons[i].gameObject.transform.position = playPos;
+            targetButtons[i].SetBox();
 
             Vector2 enemyPos = enemyPositions[i];
             if(enemies[i] != null) {
@@ -172,5 +175,16 @@ public class BattleManager : MonoBehaviour
             enemy.SelectMove("Attack");
             enemy.SelectedMove.Targets = new List<CharacterScript>() { players[Random.Range(0, 4)] };
         }
+    }
+
+    // switches the positions of these two characters by index
+    public void SwapCharacters(int one, int two) {
+        CharacterScript swapper = players[one];
+        players[one] = players[two];
+        players[two] = swapper;
+
+        // set visual position too
+        players[one].transform.position = playerPositions[one];
+        players[two].transform.position = playerPositions[two];
     }
 }

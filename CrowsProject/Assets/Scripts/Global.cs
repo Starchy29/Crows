@@ -35,6 +35,9 @@ public class Global : MonoBehaviour
     [SerializeField] private EnemySelection enemySelectMenu;
     public EnemySelection EnemySelectMenu { get { return enemySelectMenu; } }
 
+    [SerializeField] private AllySelect allySelectMenu;
+    public AllySelect AllySelectMenu { get { return allySelectMenu; } }
+
     [SerializeField] private Menu hunterMenu;
     public Menu HunterMenu { get { return hunterMenu; } }
 
