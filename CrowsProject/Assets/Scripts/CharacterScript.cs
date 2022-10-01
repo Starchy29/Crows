@@ -41,10 +41,15 @@ public class CharacterScript : MonoBehaviour
             Global.Inst.BattleManager.AbilityPoints += selectedMove.Cost;
             if(selectedMove.Swaps != null) {
                 // swap back and cancel selected moves in case it is no longer legal
-                foreach(Vector2 swap in selectedMove.Swaps) {
-
+                List<Vector2> swaps = selectedMove.Swaps;
+                selectedMove = null; // stops recursion
+                foreach(Vector2 swap in swaps) {
+                    Global.Inst.BattleManager.Players[(int)swap.x].Deselect();
+                    Global.Inst.BattleManager.Players[(int)swap.y].Deselect();
+                    Global.Inst.BattleManager.SwapCharacters((int)swap.x, (int)swap.y);
                 }
             }
+
             selectedMove = null;
         }
     }

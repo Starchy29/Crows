@@ -21,6 +21,7 @@ public class BattleManager : MonoBehaviour
     public readonly Vector3[] playerPositions = new Vector3[4];
     public readonly Vector3[] enemyPositions = new Vector3[4];
     public Vector3[] flierPositions = new Vector3[4];
+    private const float selectorRise = 1.5f; // distance above characters
 
     // turn execution
     private TurnMove currentMove;
@@ -52,7 +53,6 @@ public class BattleManager : MonoBehaviour
 
         // position players, enemies, and their selectors
         const float charY = -2f;
-        const float selectorRise = 1.5f; // distance above characters
         const float fliersRise = 3f; // distance above grounded enemies
         const float characterGap = 1.5f;
         for(int i = 0; i < 4; i++) {
@@ -62,7 +62,7 @@ public class BattleManager : MonoBehaviour
         }
 
         List<ButtonScript> selectButtons = Global.Inst.CharacterSelectMenu.Buttons;
-        List<ButtonScript> targetButtons = Global.Inst.AllySelectMenu.Buttons;
+        List<ButtonScript> targetButtons = Global.Inst.AllySelectMenu.AllButtons;
         for(int i = 0; i < players.Length; i++) {
             Vector3 playPos = playerPositions[i];
             if(players[i] != null) {
@@ -143,7 +143,7 @@ public class BattleManager : MonoBehaviour
         // temp: players then enemies
         List<TurnMove> moveOrder = new List<TurnMove>();
         foreach(CharacterScript player in players) {
-            if(player.SelectedMove != null) {
+            if(player.SelectedMove != null && player.SelectedMove.Swaps == null) { // don't do anything if the move is a swap
                 moveOrder.Add(player.SelectedMove);
             }
         }
@@ -179,6 +179,7 @@ public class BattleManager : MonoBehaviour
 
     // switches the positions of these two characters by index
     public void SwapCharacters(int one, int two) {
+        Debug.Log(one + " " + two);
         CharacterScript swapper = players[one];
         players[one] = players[two];
         players[two] = swapper;
@@ -186,5 +187,33 @@ public class BattleManager : MonoBehaviour
         // set visual position too
         players[one].transform.position = playerPositions[one];
         players[two].transform.position = playerPositions[two];
+
+        // swap selector buttons, two different select menus
+        ButtonScript swapButton = Global.Inst.CharacterSelectMenu.Buttons[one];
+        Global.Inst.CharacterSelectMenu.Buttons[one] = Global.Inst.CharacterSelectMenu.Buttons[two];
+        Global.Inst.CharacterSelectMenu.Buttons[two] = swapButton;
+
+        Vector3 newPos = playerPositions[one];
+        newPos.y += selectorRise;
+        Global.Inst.CharacterSelectMenu.Buttons[one].transform.position = newPos;
+        Global.Inst.CharacterSelectMenu.Buttons[one].SetBox();
+        newPos = playerPositions[two];
+        newPos.y += selectorRise;
+        Global.Inst.CharacterSelectMenu.Buttons[two].transform.position = newPos;
+        Global.Inst.CharacterSelectMenu.Buttons[two].SetBox();
+
+        // ally menu now
+        swapButton = Global.Inst.AllySelectMenu.AllButtons[one];
+        Global.Inst.AllySelectMenu.AllButtons[one] = Global.Inst.AllySelectMenu.AllButtons[two];
+        Global.Inst.AllySelectMenu.AllButtons[two] = swapButton;
+
+        newPos = playerPositions[one];
+        newPos.y += selectorRise;
+        Global.Inst.AllySelectMenu.AllButtons[one].transform.position = newPos;
+        Global.Inst.AllySelectMenu.AllButtons[one].SetBox();
+        newPos = playerPositions[two];
+        newPos.y += selectorRise;
+        Global.Inst.AllySelectMenu.AllButtons[two].transform.position = newPos;
+        Global.Inst.AllySelectMenu.AllButtons[two].SetBox();
     }
 }
