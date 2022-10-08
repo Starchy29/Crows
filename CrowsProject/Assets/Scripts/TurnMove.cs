@@ -29,12 +29,17 @@ public class TurnMove
     private List<int[]> targetGroups; // each element is a group of enemies/allies that are targeted, 0-3 ground 4-7 air front to back
     public List<int[]> TargetGroups { get { return targetGroups; } }
 
-    public List<Vector2> Swaps; // if not null, this move is a character swap. Stores pairs of positions that are swapped
+    public MoveEffect SwapFunction; // if not null, this move is a character swap
 
     public int RequiredPosition { get; set; } // any by default
     public CharacterScript RequiredPartner { get; set; } // allies only
     public int Cost { get; set; }
     public bool CanUse() {
+        if(SwapFunction != null && Global.Inst.BattleManager.HasSwapped) {
+            // can't swap more than once per turn
+            return false;
+        }
+
         if(Cost > Global.Inst.BattleManager.AbilityPoints) {
             return false;
         }
@@ -73,11 +78,6 @@ public class TurnMove
     public String Name { get { return name; } }
 
     // execution process tracking
-
-    //private Animation activeAnimation;
-    //private bool running;
-    //public bool Running { get { return running; } }
-
     private CharacterScript user;
     public List<CharacterScript> Targets { get; set; }
     public TurnMove NextMove { get; set; }
@@ -94,7 +94,6 @@ public class TurnMove
 
     // executes the move's animation, ending with the mechanical effect
     public void Run() {
-        //running = true;
         Animation activeAnimation = user.gameObject.AddComponent<Animation>();
         activeAnimation.CopyFrom(AnimationBlueprint);
         activeAnimation.OnComplete = () => { 
@@ -103,13 +102,10 @@ public class TurnMove
         };
     }
 
-    //public void Update() {
-    //    activeAnimation.Update();
-    //    if(activeAnimation.Complete) {
-    //        running = false;
-    //        moveEffect(user, Targets);
-    //    }
-    //}
+    // for swaps, executes the swap
+    public void ExecuteSwap() {
+        SwapFunction(user, Targets);
+    }
 
     // common target types
     public static readonly List<int[]> AnyTarget = new List<int[]>() { 

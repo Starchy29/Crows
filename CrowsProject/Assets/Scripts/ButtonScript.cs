@@ -91,9 +91,14 @@ public class ButtonScript : MonoBehaviour
     }
 
     // saves a rectangle that matches the button's shape
-    public void SetBox() {
+    private void SetBox() {
         Vector3 pos = gameObject.transform.position;
         Vector3 scale = gameObject.transform.localScale;
         box = new Rect(pos.x - scale.x / 2, pos.y - scale.y / 2, scale.x, scale.y);
+    }
+
+    public void SetPosition(Vector3 position) { 
+        transform.position = position;
+        SetBox();
     }
 }

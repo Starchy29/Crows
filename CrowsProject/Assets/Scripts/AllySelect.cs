@@ -12,10 +12,11 @@ public class AllySelect : Menu
 
     public List<ButtonScript> AllButtons; // cultist, hunter, demon, then witch
 
-    public delegate void NormalEvent();
-    public NormalEvent OnSelect;
+    //public delegate void NormalEvent();
+    //public NormalEvent OnSelect;
 
     private TurnMove selectingMove; // the move that this menu is assigning targets to
+    private CharacterScript user;
 
     public void OpenAndSetup(TurnMove selector, Menu opener, SelectionType selection, int userSlot) {
         selectingMove = selector;
@@ -73,29 +74,16 @@ public class AllySelect : Menu
             selectingMove.Targets = new List<CharacterScript>();
             int index = AllButtons.IndexOf(Selected);
             selectingMove.Targets.Add(Global.Inst.BattleManager.Players[index]);
-            //switch(index) {
-            //    case 0:
-            //        selectingMove.Targets.Add(Global.Inst.Cultist);
-            //        break;
-
-            //    case 1:
-            //        selectingMove.Targets.Add(Global.Inst.Hunter);
-            //        break;
-
-            //    case 2:
-            //        selectingMove.Targets.Add(Global.Inst.Demon);
-            //        break;
-
-            //    case 3:
-            //        selectingMove.Targets.Add(Global.Inst.Witch);
-            //        break;
-            //}
+            
 
             // if swap move, swap now
-            if(OnSelect != null) {
-                OnSelect();
-                OnSelect = null;
+            if(selectingMove.SwapFunction != null) {
+                selectingMove.ExecuteSwap();
             }
+            //if(OnSelect != null) {
+            //    OnSelect();
+            //    OnSelect = null;
+            //}
 
             // close menu
             Close();

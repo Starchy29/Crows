@@ -21,7 +21,17 @@ public class HunterScript : CharacterScript
             null,
             null // targets allies
         );
-        swap.Swaps = new List<Vector2>();
+        swap.SwapFunction = (CharacterScript user, List<CharacterScript> targets) => {
+            CharacterScript[] newOrder = new CharacterScript[4];
+            Global.Inst.BattleManager.Players.CopyTo(newOrder, 0);
+            int thisIndex = Global.Inst.BattleManager.GetPlayerIndex(user);
+            int otherIndex = Global.Inst.BattleManager.GetPlayerIndex(SelectedMove.Targets[0]);
+
+            CharacterScript swapper = Global.Inst.BattleManager.Players[thisIndex];
+            newOrder[otherIndex] = swapper;
+            newOrder[thisIndex] = Global.Inst.BattleManager.Players[otherIndex];
+            Global.Inst.BattleManager.SwapCharacters(newOrder);
+        };
         moveList.Add(swap);
     }
 
@@ -41,15 +51,7 @@ public class HunterScript : CharacterScript
 
     public void SelectHeal() {
         if(SelectMove("Swap")) {
-            List<CharacterScript> listPlayers = new List<CharacterScript>(Global.Inst.BattleManager.Players);
-            Global.Inst.AllySelectMenu.OpenAndSetup(SelectedMove, Global.Inst.HunterMenu, AllySelect.SelectionType.Adjacent, listPlayers.IndexOf(this));
-
-            // swap once selected
-            Global.Inst.AllySelectMenu.OnSelect = () => {
-                SelectedMove.Swaps.Clear();
-                SelectedMove.Swaps.Add(new Vector2(listPlayers.IndexOf(this), listPlayers.IndexOf(SelectedMove.Targets[0])));
-                Global.Inst.BattleManager.SwapCharacters(listPlayers.IndexOf(this), listPlayers.IndexOf(SelectedMove.Targets[0]));
-            };
+            Global.Inst.AllySelectMenu.OpenAndSetup(SelectedMove, Global.Inst.HunterMenu, AllySelect.SelectionType.Adjacent, Global.Inst.BattleManager.GetPlayerIndex(this));
         }
     }
 }

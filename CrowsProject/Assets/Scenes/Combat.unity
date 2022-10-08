@@ -429,6 +429,16 @@ MonoBehaviour:
   - {fileID: 405417421}
   - {fileID: 1935054106}
   - {fileID: 1493893964}
+  moveSelectButtons:
+  - {fileID: 1188547204}
+  - {fileID: 766049254}
+  - {fileID: 731471568}
+  - {fileID: 1676042232}
+  allySelectButtons:
+  - {fileID: 1388248359}
+  - {fileID: 2117321336}
+  - {fileID: 416607241}
+  - {fileID: 1313706666}
   flierPositions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
@@ -808,6 +818,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAlly: 1
   maxHealth: 30
+  HasSwapped: 0
 --- !u!1 &579113903
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,6 +992,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAlly: 1
   maxHealth: 15
+  HasSwapped: 0
 --- !u!1 &619089490 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3925255922256089262, guid: b25134ec61c2c234ba66ec541f9f0ad6, type: 3}
@@ -1330,6 +1342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAlly: 1
   maxHealth: 10
+  HasSwapped: 0
 --- !u!1001 &1101143797
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1812,6 +1825,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAlly: 1
   maxHealth: 20
+  HasSwapped: 0
 --- !u!1001 &1452921822
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2838,7 +2852,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6517504366735048485, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.1274405
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6517504366735048485, guid: cf015751f6673b846818887f211e0567, type: 3}
       propertyPath: m_LocalRotation.w

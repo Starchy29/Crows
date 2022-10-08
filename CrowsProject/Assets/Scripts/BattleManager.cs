@@ -7,8 +7,15 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private GameObject characterPrefab;
     [SerializeField] private ButtonScript[] enemyButtons;
 
-    private bool IsMoveSelect = true; // false: turn animation is playing
+    [SerializeField] private ButtonScript[] moveSelectButtons; // cultist, hunter, demon, witch
+    [SerializeField] private ButtonScript[] allySelectButtons;
+    private Dictionary<CharacterScript, ButtonScript> allyToMoveSelect;
+    private Dictionary<CharacterScript, ButtonScript> allyToAllySelect;
 
+    private bool IsMoveSelect = true; // false: turn animation is playing, might be useless
+
+    private CharacterScript[] beforeSwap; // if not null, means the player's one swap for the turn has been used. Stores the formation before the swap happened for undo
+    public bool HasSwapped { get { return beforeSwap != null; } }
     public int AbilityPoints { get; set; }
 
     // character positions
@@ -40,6 +47,18 @@ public class BattleManager : MonoBehaviour
         players[2] = Global.Inst.Demon;
         players[3] = Global.Inst.Witch;
 
+        allyToMoveSelect = new Dictionary<CharacterScript, ButtonScript>();
+        allyToMoveSelect[Global.Inst.Cultist] = moveSelectButtons[0];
+        allyToMoveSelect[Global.Inst.Hunter] = moveSelectButtons[1];
+        allyToMoveSelect[Global.Inst.Demon] = moveSelectButtons[2];
+        allyToMoveSelect[Global.Inst.Witch] = moveSelectButtons[3];
+
+        allyToAllySelect = new Dictionary<CharacterScript, ButtonScript>();
+        allyToAllySelect[Global.Inst.Cultist] = allySelectButtons[0];
+        allyToAllySelect[Global.Inst.Hunter] = allySelectButtons[1];
+        allyToAllySelect[Global.Inst.Demon] = allySelectButtons[2];
+        allyToAllySelect[Global.Inst.Witch] = allySelectButtons[3];
+
         // Spawn in enemies
         GameObject enemy = Instantiate(characterPrefab);
         enemy.GetComponent<SpriteRenderer>().color = Color.red;
@@ -61,28 +80,18 @@ public class BattleManager : MonoBehaviour
             flierPositions[i] = new Vector3(2.5f + characterGap * i, charY + fliersRise, 0);
         }
 
+        AlignPlayers();
+
         List<ButtonScript> selectButtons = Global.Inst.CharacterSelectMenu.Buttons;
         List<ButtonScript> targetButtons = Global.Inst.AllySelectMenu.AllButtons;
-        for(int i = 0; i < players.Length; i++) {
-            Vector3 playPos = playerPositions[i];
-            if(players[i] != null) {
-                players[i].gameObject.transform.position = playPos;
-            }
-
-            playPos.y += selectorRise;
-            selectButtons[i].gameObject.transform.position = playPos;
-            selectButtons[i].SetBox();
-            targetButtons[i].gameObject.transform.position = playPos;
-            targetButtons[i].SetBox();
-
+        for(int i = 0; i < enemies.Length; i++) {
             Vector2 enemyPos = enemyPositions[i];
             if(enemies[i] != null) {
                 enemies[i].gameObject.transform.position = enemyPos;
             }
 
             enemyPos.y += selectorRise;
-            enemyButtons[i].gameObject.transform.position = enemyPos;
-            enemyButtons[i].SetBox();
+            enemyButtons[i].SetPosition(enemyPos);
 
             Vector2 flierPos = flierPositions[i];
             if(fliers[i] != null) {
@@ -90,8 +99,7 @@ public class BattleManager : MonoBehaviour
             }
 
             flierPos.y += selectorRise;
-            enemyButtons[i + 4].gameObject.transform.position = flierPos;
-            enemyButtons[i + 4].SetBox();
+            enemyButtons[i + 4].SetPosition(flierPos);
         }
 
         // make the battle start with a pause so the enemy can choose moves
@@ -117,7 +125,8 @@ public class BattleManager : MonoBehaviour
                         foreach(CharacterScript character in players) { // clear selected moves
                             character.SelectMove(null);
                         }
-                        AbilityPoints += 7;
+                        AbilityPoints += 6;
+                        beforeSwap = null; // allow another swap move
                         Global.Inst.CharacterSelectMenu.Open();
                     } else { 
                         // run next move
@@ -143,7 +152,7 @@ public class BattleManager : MonoBehaviour
         // temp: players then enemies
         List<TurnMove> moveOrder = new List<TurnMove>();
         foreach(CharacterScript player in players) {
-            if(player.SelectedMove != null && player.SelectedMove.Swaps == null) { // don't do anything if the move is a swap
+            if(player.SelectedMove != null && player.SelectedMove.SwapFunction == null) { // don't do anything if the move is a swap
                 moveOrder.Add(player.SelectedMove);
             }
         }
@@ -177,43 +186,38 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // switches the positions of these two characters by index
-    public void SwapCharacters(int one, int two) {
-        Debug.Log(one + " " + two);
-        CharacterScript swapper = players[one];
-        players[one] = players[two];
-        players[two] = swapper;
+    // helper
+    public int GetPlayerIndex(CharacterScript player) {
+        for(int i = 0; i < players.Length; i++) {
+            if(players[i] == player) {
+                return i;
+            }
+        }
 
-        // set visual position too
-        players[one].transform.position = playerPositions[one];
-        players[two].transform.position = playerPositions[two];
+        return -1;
+    }
 
-        // swap selector buttons, two different select menus
-        ButtonScript swapButton = Global.Inst.CharacterSelectMenu.Buttons[one];
-        Global.Inst.CharacterSelectMenu.Buttons[one] = Global.Inst.CharacterSelectMenu.Buttons[two];
-        Global.Inst.CharacterSelectMenu.Buttons[two] = swapButton;
+    // moves the characters into the indicated positions
+    public void SwapCharacters(CharacterScript[] newOrder) {
+        beforeSwap = players;
+        players = newOrder;
+        AlignPlayers();
+    }
 
-        Vector3 newPos = playerPositions[one];
-        newPos.y += selectorRise;
-        Global.Inst.CharacterSelectMenu.Buttons[one].transform.position = newPos;
-        Global.Inst.CharacterSelectMenu.Buttons[one].SetBox();
-        newPos = playerPositions[two];
-        newPos.y += selectorRise;
-        Global.Inst.CharacterSelectMenu.Buttons[two].transform.position = newPos;
-        Global.Inst.CharacterSelectMenu.Buttons[two].SetBox();
+    public void UndoSwap() {
+        players = beforeSwap;
+        beforeSwap = null;
+        AlignPlayers();
+    }
 
-        // ally menu now
-        swapButton = Global.Inst.AllySelectMenu.AllButtons[one];
-        Global.Inst.AllySelectMenu.AllButtons[one] = Global.Inst.AllySelectMenu.AllButtons[two];
-        Global.Inst.AllySelectMenu.AllButtons[two] = swapButton;
-
-        newPos = playerPositions[one];
-        newPos.y += selectorRise;
-        Global.Inst.AllySelectMenu.AllButtons[one].transform.position = newPos;
-        Global.Inst.AllySelectMenu.AllButtons[one].SetBox();
-        newPos = playerPositions[two];
-        newPos.y += selectorRise;
-        Global.Inst.AllySelectMenu.AllButtons[two].transform.position = newPos;
-        Global.Inst.AllySelectMenu.AllButtons[two].SetBox();
+    // puts the players in their appropriate position and moves their buttons
+    private void AlignPlayers() {
+        for(int i = 0; i < players.Length; i++) {
+            players[i].transform.position = playerPositions[i];
+            Vector3 buttonPos = playerPositions[i];
+            buttonPos.y += selectorRise;
+            allyToAllySelect[players[i]].SetPosition(buttonPos);
+            allyToMoveSelect[players[i]].SetPosition(buttonPos);
+        }
     }
 }
