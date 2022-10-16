@@ -11,11 +11,11 @@ public enum MovePriority {
     Debuff
 }
 
-public enum Aim {
-    None,
-    Forward,
-    Up,
-    Air,
+// can be multiple at once
+public enum Aim : uint {
+    None = 0,
+    Forward = 1,
+    Up = 2,
 }
 
 // defines how a move works and also tracks its animation progress
@@ -31,7 +31,7 @@ public class TurnMove
 
     public MoveEffect SwapFunction; // if not null, this move is a character swap
 
-    public int RequiredPosition { get; set; } // any by default
+    public List<int> RequiredPositions { get; set; } // any by default, lists each spot that is valid
     public CharacterScript RequiredPartner { get; set; } // allies only
     public int Cost { get; set; }
     public bool CanUse() {
@@ -44,7 +44,7 @@ public class TurnMove
             return false;
         }
 
-        if(RequiredPosition >= 0 && user.GetPosition() != RequiredPosition) {
+        if(RequiredPositions != null && !RequiredPositions.Contains(user.GetPosition())) {
             return false;
         }
 
@@ -74,13 +74,13 @@ public class TurnMove
     }
 
     private String name;
-    
     public String Name { get { return name; } }
 
     // execution process tracking
     private CharacterScript user;
     public List<CharacterScript> Targets { get; set; }
     public TurnMove NextMove { get; set; }
+    public GameObject Display { get; set; } // Shows what the move will do
 
     public TurnMove(String name, CharacterScript user, MoveEffect effect, List<int[]> targetType) {
         //running = false;
@@ -88,7 +88,7 @@ public class TurnMove
         this.user = user;
         this.moveEffect = effect;
         this.targetGroups = targetType;
-        RequiredPosition = -1; // means any position
+        RequiredPositions = null; // means any position
         Cost = 0;
     }
 

@@ -16,6 +16,12 @@ public class CharacterScript : MonoBehaviour
     public uint Health { get { return health; } }
     public bool IsAlive { get { return health > 0; } }
 
+    // traits
+    protected Defense defense;
+        // status
+    public float AttackMultiplier { get; set; }
+    public float ResistanceMultiplier { get; set; }
+
     // move selection
     private TurnMove selectedMove;
     protected List<TurnMove> moveList;
@@ -35,8 +41,7 @@ public class CharacterScript : MonoBehaviour
 
         return false;
     }
-    // undoes a move selection and refunds ability points
-    public void Deselect() {
+    public void Deselect() { // undoes a move selection and refunds ability points
         if(selectedMove != null) {
             Global.Inst.BattleManager.AbilityPoints += selectedMove.Cost;
             if(selectedMove.SwapFunction != null) {
@@ -63,7 +68,7 @@ public class CharacterScript : MonoBehaviour
         // temp
         TurnMove attack = new TurnMove("Attack", this, 
             (CharacterScript user, List<CharacterScript> targets) => {
-                targets[0].TakeDamage(1);
+                targets[0].ReceiveAttack(new Attack(1, Aim.Up), user);
             },
             TurnMove.GroundTarget
         );
@@ -108,6 +113,31 @@ public class CharacterScript : MonoBehaviour
             health -= amount;
         }
         hpBar.Reduce(amount, (float)health / maxHealth);
+    }
+
+    public void ReceiveAttack(Attack attack, CharacterScript user) {
+        // check if defense blocks it
+        if(defense != null && ((defense.Direction & attack.AimType) > 0)) {
+            if(defense.OnBlock != null) {
+                defense.OnBlock(attack);
+            }
+            if(defense.Frail) {
+                defense = null;
+            }
+
+            return;
+        }
+
+        TakeDamage((uint)(attack.Damage * ResistanceMultiplier * user.AttackMultiplier));
+        if(attack.OnHit != null) {
+            attack.OnHit(this);
+        }
+    }
+
+    public void OnTurnEnd() {
+        ResistanceMultiplier = 1;
+        AttackMultiplier = 1;
+        defense = null;
     }
 
     protected virtual void AddMoves() { } // sub classes can add their specific moves

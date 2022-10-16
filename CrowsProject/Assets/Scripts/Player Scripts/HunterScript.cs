@@ -33,6 +33,14 @@ public class HunterScript : CharacterScript
             Global.Inst.BattleManager.SwapCharacters(newOrder);
         };
         moveList.Add(swap);
+
+        TurnMove block = new TurnMove("Block", this, 
+            (CharacterScript user, List<CharacterScript> targets) => {
+                defense = new Defense(Aim.Up | Aim.Forward, true);
+            },
+            null
+        );
+        moveList.Add(block);
     }
 
     // button move selectors
@@ -42,16 +50,24 @@ public class HunterScript : CharacterScript
         }
     }
 
-    //public void SelectHeal() {
-    //    if(SelectMove("Heal")) {
-    //        List<CharacterScript> listPlayers = new List<CharacterScript>(Global.Inst.BattleManager.Players);
-    //        Global.Inst.AllySelectMenu.OpenAndSetup(SelectedMove, Global.Inst.HunterMenu, AllySelect.SelectionType.Any, listPlayers.IndexOf(Global.Inst.Hunter));
-    //    }
-    //}
-
     public void SelectHeal() {
+        if(SelectMove("Heal")) {
+            List<CharacterScript> listPlayers = new List<CharacterScript>(Global.Inst.BattleManager.Players);
+            Global.Inst.AllySelectMenu.OpenAndSetup(SelectedMove, Global.Inst.HunterMenu, AllySelect.SelectionType.Any, listPlayers.IndexOf(Global.Inst.Hunter));
+        }
+    }
+
+    public void SelectSwap() {
         if(SelectMove("Swap")) {
             Global.Inst.AllySelectMenu.OpenAndSetup(SelectedMove, Global.Inst.HunterMenu, AllySelect.SelectionType.Adjacent, Global.Inst.BattleManager.GetPlayerIndex(this));
+        }
+    }
+
+    public void SelectBlock() {
+        if(SelectMove("Block")) {
+            //Global.Inst.AllySelectMenu.OpenAndSetup(SelectedMove, Global.Inst.HunterMenu, AllySelect.SelectionType.Adjacent, Global.Inst.BattleManager.GetPlayerIndex(this));
+            Global.Inst.CharacterSelectMenu.Open();
+            Global.Inst.HunterMenu.Close();
         }
     }
 }

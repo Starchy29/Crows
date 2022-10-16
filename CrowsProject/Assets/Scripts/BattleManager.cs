@@ -127,6 +127,14 @@ public class BattleManager : MonoBehaviour
                         }
                         AbilityPoints += 6;
                         beforeSwap = null; // allow another swap move
+
+                        // reset stats
+                        for(int i = 0; i < 4; i++) {
+                            players[i]?.OnTurnEnd();
+                            enemies[i]?.OnTurnEnd();
+                            fliers[i]?.OnTurnEnd();
+                        }
+
                         Global.Inst.CharacterSelectMenu.Open();
                     } else { 
                         // run next move
