@@ -2842,6 +2842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1918814271}
   - component: {fileID: 1918814270}
+  - component: {fileID: 1918814272}
   m_Layer: 0
   m_Name: Witch Menu
   m_TagString: Untagged
@@ -2878,6 +2879,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1918814272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918814269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad46446b706a064991d6904460e5e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  user: {fileID: 0}
+  names: []
 --- !u!1001 &1935054105
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3161,6 +3176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1974630354}
   - component: {fileID: 1974630353}
+  - component: {fileID: 1974630355}
   m_Layer: 0
   m_Name: Cultist Menu
   m_TagString: Untagged
@@ -3197,6 +3213,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1974630355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974630352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad46446b706a064991d6904460e5e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  user: {fileID: 0}
+  names: []
 --- !u!1001 &2026177279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3282,6 +3312,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2090929053}
   - component: {fileID: 2090929052}
+  - component: {fileID: 2090929054}
   m_Layer: 0
   m_Name: Demon Menu
   m_TagString: Untagged
@@ -3318,6 +3349,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2090929054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090929051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad46446b706a064991d6904460e5e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  user: {fileID: 0}
+  names: []
 --- !u!114 &2100030139 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6517504366735048506, guid: cf015751f6673b846818887f211e0567, type: 3}
